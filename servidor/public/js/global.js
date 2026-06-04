@@ -3,9 +3,6 @@ const FAVORITES_KEY = "favoritos";
 const footerBtn = document.getElementById("footer-btn");
 const footerInput = document.getElementById("footer-input");
 
-const loginBtn = document.getElementById("login-btn");
-const loginInput = document.querySelectorAll(".login-input");
-
 function getCart() {
   return JSON.parse(localStorage.getItem(CART_KEY)) || [];
 }
@@ -146,12 +143,4 @@ if (footerBtn) {
 
     showMessage("Debes ingresar tu correo electrónico", "error")
   });
-}
-
-if (loginBtn) {
-  loginBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    loginInput.value = "";
-    showMessage("El panel se encuentra en mantenimento...", "error");
-})
-}
+};

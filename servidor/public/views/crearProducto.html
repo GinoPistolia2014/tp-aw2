@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    <title>Panel de Administración - Crear Nuevo Producto</title>
+</head>
+
+<body class="panelbody">
+    
+    <aside class="panelaside">
+        <div class="header header-center panellogo">PIERCING</div>
+        <div class="aside2">
+            <ul class="categorias-lista">
+                <li id="tareas">Tareas</li>
+                <li id="ordenes">Órdenes</li>
+                <li id="inventario">Inventario</li>
+            </ul>
+        </div>
+        <div class="aside3">
+            <a href="/views/login.html">Cerrar Sesión</a>
+        </div>
+    </aside>
+
+    <div id="mensaje" class="mensaje-oculto"></div>
+
+    <main class="panelmain">
+        <header class="panelheader"></header>
+
+        <section class="panelsection">
+            <h2 class="paneltitle">Tareas</h2>
+            <form id="form-crearproducto" action="/api/v1/productos" method="post" class="checkout-form">
+                <h3 class="createformtitle">Crear un nuevo producto</h3>
+
+                    <div class="createformcontainer">
+                        <div class="form-grid">
+                        <input type="text" id="nombre" placeholder="Nombre del producto" required>
+                        <input type="number" id="precio" placeholder="Precio" required>
+                        <select id="categoria" id="categoria" required>
+                            <option value="">Selecciona una categoria</option>
+                            <option value="abrigos">Abrigos</option>
+                            <option value="jeans">Jeans</option>
+                            <option value="remeras">Remeras</option>
+                            <option value="camisas">Camisas</option>
+                            <option value="vestidos">Vestidos</option>
+                        </select>
+                        <input type="text" id="imagen" placeholder="URL Imagen" required>
+                    </div>
+                    <div class="form-grid">
+                        <input type="text" id="descripcion" placeholder="Breve Descripción" required>
+                        <input type="number" id="stock" placeholder="Stock" required>
+                        <select id="talle" required>
+                            <option value="">Selecciona un talle</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                            <option value="3XL">3XL</option>
+                        </select>
+                        <input type="number" id="descuento" placeholder="Descuento a aplicar">
+                    </div>
+                </div>
+
+                <button type="submit" id="crearproductobtn" class="btn-checkout">Crear Producto</button>
+            </form>
+
+            <button type="submit" class="btn-checkout" id="backtomainpanel">← Volver al Panel Principal</button>
+        </section>
+         
+    </main>
+
+    <script src="../js/panelAdmin.js"></script>
+    <script type="module" src="../js/crearProducto.js"></script>
+
+</body>
+</html>

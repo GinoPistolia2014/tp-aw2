@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    <title>Panel de Administración - Eliminar Producto</title>
+</head>
+
+<body class="panelbody">
+    
+    <aside class="panelaside">
+        <div class="header header-center panellogo">PIERCING</div>
+        <div class="aside2">
+            <ul class="categorias-lista">
+                <li id="tareas">Tareas</li>
+                <li id="ordenes">Órdenes</li>
+                <li id="inventario">Inventario</li>
+            </ul>
+        </div>
+        <div class="aside3">
+            <a href="/views/login.html">Cerrar Sesión</a>
+        </div>
+    </aside>
+
+    <div id="mensaje" class="mensaje-oculto"></div>
+
+
+    <main class="panelmain">
+        <header class="panelheader"></header>
+
+        <section class="panelsection">
+            <h2 class="paneltitle">Tareas</h2>
+            <form id="form-eliminarproducto" class="checkout-form">
+                <h3 class="createformtitle">Eliminar producto</h3>
+
+                <div class="createformcontainer">
+
+                    <div class="form-grid">
+                        <h4>Ingrese el número de ID del producto que quiere discontinuar</h4>
+                        <input type="text" id="deleteinfo" placeholder="ID del producto" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="eliminarproductobtn" class="btn-checkout">Eliminar Producto</button>
+            </form>
+
+            <button class="btn-checkout" id="backtomainpanel">← Volver al Panel Principal</button>
+        </section>
+         
+    </main>
+
+    <script src="../js/panelAdmin.js"></script>
+    <script type="module" src="../js/eliminarProducto.js"></script>
+
+</body>
+</html>
