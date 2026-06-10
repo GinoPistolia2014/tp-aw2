@@ -95,11 +95,7 @@ async function toggleContent() {
                     <h3>Eliminar Productos</h3>
                     <p>Dé de baja un artículo específico por renovación o falta de stock</p>
                 </article>
-
-                <article id="revisar-inventario">
-                    <h3>Revisar Inventario</h3>
-                    <p>Controle el número de artículos disponibles en stock</p>
-                </article>
+                
             </div>
         `
 
@@ -128,6 +124,9 @@ async function toggleContent() {
     } else if (mainContainer.classList.contains("ordenes")) {
         const peticion = await fetch('/api/v1/ordenes');
         const ordenes = await peticion.json();
+        while (!ordenes) {
+            mainContainer.innerHTML = `Cargando...`
+        }
         let paginaActual = 1;
         const headers = ['Cliente', 'Dirección', 'Método de Pago', 'Total']
         const campos = ['nombreCompleto', 'direccion', 'metodoPago', 'total']
@@ -148,6 +147,10 @@ logoutBtn.addEventListener('click', () => {
 });
 
 function renderizarObjetos(datos, paginaActual, titulo, headers, campos) {
+
+    while (!datos) {
+        mainContainer.innerHTML = `Cargando...`
+    }
     const elementosPorPagina = 5;
 
     const inicio = (paginaActual - 1) * elementosPorPagina;
@@ -178,14 +181,14 @@ function renderizarObjetos(datos, paginaActual, titulo, headers, campos) {
 
         <div class="pagination">
                  <span id="prev">
-                    <
+                     ←
                </span>
 
                  <span>${paginaActual}</span>
 
                  <span id="next"
                 >
-                     >
+                     → 
                  </span>
              </div>
         </div>

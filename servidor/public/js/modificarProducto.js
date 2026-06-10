@@ -6,10 +6,17 @@ const idModificar = document.getElementById("idproducto");
 const criterio = document.getElementById("criteriomodificar");
 const nuevaInformacion = document.getElementById("nuevainfo");
 const categorias = document.querySelectorAll(".categorias-lista li");
+const userDinamico = document.getElementById("userdinamico");
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    ////Colocación del User en el encabezado
+    let user = localStorage.getItem("usuario");
+    user !== null ? 
+        userDinamico.textContent = `Bienvenido/a ${user}` : 
+        userDinamico.textContent = "Bienvenido/a";
     
+    ////Activación de categorías del panel lateral
     categorias.forEach(cat => {
         cat.addEventListener("click", () => {
         categorias.forEach(c => c.classList.remove("active-category"));

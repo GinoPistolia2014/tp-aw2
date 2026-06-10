@@ -11,9 +11,15 @@ const stock = document.getElementById("stock");
 const talle = document.getElementById("talle");
 const descuento = document.getElementById("descuento");
 const categorias = document.querySelectorAll(".categorias-lista li");
+const userDinamico = document.getElementById("userdinamico");
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    let user = localStorage.getItem("usuario");
+    user !== null ? 
+        userDinamico.textContent = `Bienvenido/a ${user}` : 
+        userDinamico.textContent = "Bienvenido/a";
     
     categorias.forEach(cat => {
         cat.addEventListener("click", () => {
@@ -32,6 +38,7 @@ createForm.addEventListener('submit', async(ev) => {
     ev.preventDefault();
     validacion();
     
+    ///Envío manual de datos del formulario
     await fetch('/api/v1/productos', {
         method: 'POST',
         headers: {
@@ -41,7 +48,7 @@ createForm.addEventListener('submit', async(ev) => {
             nombre: nombre.value,
             precio: precio.value,
             categoria: categoria.value,
-            imagen: imagen.value,
+            imagen: imagen.value, /// Campo no obligatorio: Aún falta la implementación de Multer
             descripcion: descripcion.value,
             stock: stock.value,
             talle: talle.value,
@@ -71,6 +78,6 @@ function validacion() {
         };
 
     } else {
-        showMessage('Salvo imagen y descuento, todos los campos deben llenarse obligatoriamente.', 'error');
+        showMessage('A excepción de imagen y descuento, todos los campos deben completarse obligatoriamente.', 'error');
     };
 };

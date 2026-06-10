@@ -24,16 +24,19 @@ export async function obtenerProductoPorId(req, res) {
 export async function agregarProducto(req, res) {
 
     try {
+        ///Búsqueda del último n° de ID presente de la BD para luego sumarle 1 mas al nuevo producto
         const lastProduct = await productsModel
         .findOne()
         .sort({ id: -1 });
-
+        
         const newId = lastProduct.id + 1;
+
+        ///Composición del producto
         const newProduct = await new productsModel({
             nombre: req.body.nombre,
             precio: req.body.precio,
             categoria: req.body.categoria,
-            imagen: req.body.imagen,
+            imagen: req.file || false,
             descripcion: req.body.descripcion,
             stock: req.body.stock,
             talle: req.body.talle,

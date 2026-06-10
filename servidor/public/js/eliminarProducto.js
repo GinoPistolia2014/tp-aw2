@@ -4,9 +4,16 @@ const backToPanel = document.getElementById("backtomainpanel");
 const deleteForm = document.getElementById("form-eliminarproducto");
 const idEliminar = document.getElementById("deleteinfo");
 const categorias = document.querySelectorAll(".categorias-lista li");
+const userDinamico = document.getElementById("userdinamico");
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    let user = localStorage.getItem("usuario");
+    user !== null ? 
+        userDinamico.textContent = `Bienvenido/a ${user}` : 
+        userDinamico.textContent = "Bienvenido/a";
     
     categorias.forEach(cat => {
         cat.addEventListener("click", () => {

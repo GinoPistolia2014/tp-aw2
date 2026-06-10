@@ -9,7 +9,7 @@ const PUERTO = 3000;
 const app = express();
 const DBconnection = await mongoose.connect("mongodb+srv://tomigauna:secunfest01@piercing.7cagxsm.mongodb.net/piercing")
   .then(console.log('Base de datos conectada correctamente'))
-  .catch((Error) => Error.message)
+  .catch((err) => console.log('Error: ' + err.message))
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

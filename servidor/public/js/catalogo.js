@@ -1,4 +1,6 @@
-const API_URL = "https://69e4e816cfa9394db8da8480.mockapi.io/products";
+
+const API_URL = "https://69e4e816cfa9394db8da8480.mockapi.io/products"
+console.log(API_URL)
 
 let productos = [];
 let productosFiltrados = [];
