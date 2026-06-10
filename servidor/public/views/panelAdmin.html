@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    <title>Panel de Administración</title>
+</head>
+
+<body class="panelbody">
+    
+    <aside class="panelaside">
+        <div class="header header-center panellogo">PIERCING</div>
+        <div class="aside2">
+            <ul class="categorias-lista">
+                <li id="tareas">Tareas</li>
+                <li id="ordenes">Órdenes</li>
+                <li id="inventario">Inventario</li>
+            </ul>
+        </div>
+        <div class="aside3">
+            <a href="/views/login.html" id="logout-btn">Cerrar Sesión</a>
+        </div>
+    </aside>
+
+    <main class="panelmain">
+        <header class="panelheader">
+            <p id="userdinamico"></p>
+            <img src="/img/usuario.png" alt="User">
+        </header>
+
+        <section class="panelsection">
+            <h3>¡Bienvenido/a al panel de administración!</h3>
+            <p>Navega a través de las opciones del panel lateral</p>
+        </section>
+         
+    </main>
+
+    <script src="../js/panelAdmin.js"></script>
+
+</body>
+</html>
