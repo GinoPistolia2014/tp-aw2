@@ -4,10 +4,12 @@ import { fileURLToPath } from "url";
 import mongoose, { Error } from "mongoose";
 import productsRouter from "./modulos/rutas/rutas.productos.mjs";
 import ordersRouter from "./modulos/rutas/rutas.ordenes.mjs";
+import config from "./config/config.mjs";
 
-const PUERTO = 3000;
+
+const PUERTO = config.puerto || 4000;
 const app = express();
-const DBconnection = await mongoose.connect("mongodb+srv://tomigauna:secunfest01@piercing.7cagxsm.mongodb.net/piercing")
+const DBconnection = await mongoose.connect(config.mongoUri)
   .then(console.log('Base de datos conectada correctamente'))
   .catch((err) => console.log('Error: ' + err.message))
 
