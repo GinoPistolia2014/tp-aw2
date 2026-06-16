@@ -5,9 +5,10 @@ import mongoose, { Error } from "mongoose";
 import productsRouter from "./modulos/rutas/rutas.productos.mjs";
 import ordersRouter from "./modulos/rutas/rutas.ordenes.mjs";
 import config from "./config/config.mjs";
+import usersRouter from "./modulos/rutas/rutas.usuarios.mjs";
 
 
-const PUERTO = config.puerto || 4000;
+export const PUERTO = config.puerto || 4000;
 const app = express();
 const DBconnection = await mongoose.connect(config.mongoUri)
   .then(console.log('Base de datos conectada correctamente'))
@@ -23,9 +24,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); ///Permite que Express pueda interpretar los datos enviados desde un formulario
 app.use(express.static(path.resolve(__dirname, "public"))); 
 
-
 app.use('/api/v1', productsRouter);
 app.use('/api/v1', ordersRouter);
+app.use('/api/v1', usersRouter);
 
 
 /* =============================

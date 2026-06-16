@@ -39,9 +39,9 @@
 
                     <div class="createformcontainer">
                         <div class="form-grid">
-                        <input type="text" id="nombre" placeholder="Nombre del producto" required>
-                        <input type="number" id="precio" placeholder="Precio" required>
-                        <select id="categoria" id="categoria" required>
+                        <input type="text" name="nombre" id="nombre" placeholder="Nombre del producto" required>
+                        <input type="number" name="precio" id="precio" placeholder="Precio" required>
+                        <select id="categoria" name="categoria" id="categoria" required>
                             <option value="">Selecciona una categoria</option>
                             <option value="Abrigos">Abrigos</option>
                             <option value="Jeans">Jeans</option>
@@ -52,9 +52,9 @@
                         <input type="file" id="imagen" name="imagen" placeholder="URL Imagen" required>
                     </div>
                     <div class="form-grid">
-                        <input type="text" id="descripcion" placeholder="Breve Descripción" required>
-                        <input type="number" id="stock" placeholder="Stock" required>
-                        <select id="talle" required>
+                        <input type="text" name="descripcion" id="descripcion" placeholder="Breve Descripción" required>
+                        <input type="number" name="stock" id="stock" placeholder="Stock" required>
+                        <select name="talle" id="talle" required>
                             <option value="">Selecciona un talle</option>
                             <option value="XS">XS</option>
                             <option value="S">S</option>
@@ -64,7 +64,7 @@
                             <option value="XXL">XXL</option>
                             <option value="3XL">3XL</option>
                         </select>
-                        <input type="number" id="descuento" placeholder="Descuento a aplicar">
+                        <input type="number" name="descuento" id="descuento" placeholder="Descuento a aplicar">
                     </div>
                 </div>
 

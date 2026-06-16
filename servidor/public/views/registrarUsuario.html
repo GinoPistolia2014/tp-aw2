@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro</title>
+        <link rel="stylesheet" href="/css/style.css">
+        <link rel="shortcut icon" href="/img/favicon.png" type="image/x-icon">
+    </head>
+
+    <body class="mainlogin">
+
+        <h1 class="brandtitle">PIERCING</h1>
+
+        <div id="mensaje" class="mensaje-oculto"></div>
+
+        <main class="logincontainer  registerform">
+            <form id="register-form"  class="form-grid" enctype="multipart/form-data">
+                <legend class="logintitle">Crear Cuenta</legend>
+                <div>
+                    <input type="text" name="nombre" id="nombre" class="login-input" placeholder="Nombre/s">
+                    <input type="text" name="apellido" id="apellido" class="login-input" placeholder="Apellido/s">
+                </div>
+                <div>
+                    <input type="email" id="email" name="email" class="login-input" placeholder="Correo Electrónico">
+                    <input type="text" name="username" id="username" class="login-input" placeholder="Elige tu username">
+                </div>
+                <div>
+                    <input type="password" id="contrasena" name="contrasena" class="login-input" placeholder="Contraseña">
+                    <input type="file" name="userpic" class="login-input" id="userpic">
+                </div> 
+                <button type="submit" class="btn-checkout" id="register-btn">REGISTRARSE</button>
+            </form>
+        </main>
+        <p><a href="/views/login.html">← Volver a Inicio de Sesión</a></p>
+    </body>
+
+    <script type="module" src="../js/registrarUsuario.js"></script>
+
+</html>

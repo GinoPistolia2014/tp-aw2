@@ -37,23 +37,13 @@ createForm.addEventListener('submit', async(ev) => {
 
     ev.preventDefault();
     validacion();
+
+    const datos = new FormData(ev.target)
     
     ///Envío manual de datos del formulario
     await fetch('/api/v1/productos', {
         method: 'POST',
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            nombre: nombre.value,
-            precio: precio.value,
-            categoria: categoria.value,
-            imagen: imagen.value, /// Campo no obligatorio: Aún falta la implementación de Multer
-            descripcion: descripcion.value,
-            stock: stock.value,
-            talle: talle.value,
-            descuento: descuento.value
-        })
+        body: datos
     });
     createForm.reset();
 })
