@@ -1,5 +1,3 @@
-const API_URL = "https://69e4e816cfa9394db8da8480.mockapi.io/products";
-
 let productos = [];
 let productosFiltrados = [];
 
@@ -7,7 +5,7 @@ const catalogo = document.getElementById("catalogo");
 const buscar = document.getElementById("buscar");
 const ordenar = document.getElementById("ordenar");
 const categorias = document.querySelectorAll(".categorias-lista li");
-const categoriasFooter = document.querySelectorAll(".footer-col a")
+const categoriasFooter = document.querySelectorAll(".footer-col a");
 
 function calcularPrecioFinal(producto) {
   const precio = Number(producto.precio) || 0;
@@ -23,13 +21,21 @@ function calcularPrecioFinal(producto) {
 function normalizarProducto(p) {
   const precioFinal = calcularPrecioFinal(p);
 
+  let rutaImagen;
+
+  if (p.imagen.startsWith('https://')) {
+    rutaImagen = p.imagen;
+  } else {
+    rutaImagen = `http://localhost:3000/img/archivos/${p.imagen}`
+  }
+
   return {
     id: p.id,
     nombre: p.nombre || "Producto sin nombre",
     precio: precioFinal,
     precioOriginal: Number(p.precio) || 0,
     categoria: p.categoria || "Sin categoría",
-    imagen: p.imagen || "https://via.placeholder.com/400x500?text=Sin+imagen",
+    imagen: rutaImagen || "https://via.placeholder.com/400x500?text=Sin+imagen",
     descripcion: p.descripcion || "",
     stock: Number(p.stock) || 0,
     talle: p.talle || "",
@@ -43,7 +49,7 @@ async function cargarCatalogo() {
   try {
     catalogo.innerHTML = `<p class="empty-state">Cargando productos...</p>`;
 
-    const res = await fetch(API_URL);
+    const res = await fetch('/api/v1/productos');
 
     if (!res.ok) {
       throw new Error("Error al cargar productos");
