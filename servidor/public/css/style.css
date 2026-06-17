@@ -1603,6 +1603,12 @@ body[data-page="confirmacion"] .header {
   margin-right: 10px;
 }
 
+.panelheader img{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
 .panelsection {
   height: 90vh;
   background-color: #efefef;

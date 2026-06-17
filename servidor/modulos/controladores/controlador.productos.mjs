@@ -1,27 +1,33 @@
 import productsModel from "../modelos/modelo.productos.mjs";
+import { 
+    agregarProducto, 
+    buscarProductoPorId, 
+    buscarProductos, 
+    eliminarProducto, 
+    modificarProducto } from "../servicios/servicio.productos.mjs";
 
-export async function obtenerProductos(req, res) {
+export async function obtenerProductosControlador(req, res) {
 
     try {
-        const productos = await productsModel.find();
+        const productos = await buscarProductos();
         res.status(200).json(productos);
     } catch (error) {
         res.status(500).json(`Error al obtener todos los productos: ${error.message}`);
     };
 };
 
-export async function obtenerProductoPorId(req, res) {
+export async function obtenerProductoPorIdControlador(req, res) {
 
     try {
         const idParam = req.params.id;
-        const producto = await productsModel.find({ id: idParam });
+        const producto = await buscarProductoPorId(idParam);
         res.status(200).json(producto);
     } catch (error) {
         res.status(500).json(`Error al obtener producto por id: ${error.message}`);
     };
 }
 
-export async function agregarProducto(req, res) {
+export async function agregarProductoControlador(req, res) {
 
     try {
         ///Búsqueda del último n° de ID presente de la BD para luego sumarle 1 mas al nuevo producto
@@ -29,27 +35,24 @@ export async function agregarProducto(req, res) {
             .findOne()
             .sort({ id: -1 });
         
-        const nuevoId = ultimoProducto.id + 1;
+        const nuevoId = ultimoProducto ? ultimoProducto.id + 1 : 1;
 
         ///Composición del producto
-        const newProduct = await new productsModel({
-            nombre: req.body.nombre,
-            precio: req.body.precio,
-            categoria: req.body.categoria,
-            imagen: req.file.filename,
-            descripcion: req.body.descripcion,
-            stock: req.body.stock,
-            talle: req.body.talle,
-            descuento: req.body.descuento,
-            id: newId
-        });
+        const nuevoProducto = await agregarProducto(
+            req.body.nombre,
+            req.body.precio,
+            req.body.categoria,
+            req.file.filename,
+            req.body.descripcion,
+            req.body.stock,
+            req.body.talle,
+            req.body.descuento,
+            nuevoId
+        );
 
-        await productsModel.create(newProduct);
-
-        const result = await productsModel.findOne({ id: newId });
         await res.status(201).json({
             status:"success", 
-            payload: result
+            payload: nuevoProducto
         });
 
     } catch (error) {
@@ -57,12 +60,13 @@ export async function agregarProducto(req, res) {
     }
 };
 
-export async function modificarProducto(req, res) {
+export async function modificarProductoControlador(req, res) {
 
     try {
         const id = Number(req.params.id);
         const campoAModificar = req.body.criterio;
         const value = req.body.nuevaInfo;
+        let producto;
 
         if (
             campoAModificar === 'Precio' || 
@@ -72,18 +76,18 @@ export async function modificarProducto(req, res) {
             Number(value);
         };
 
-        await productsModel.findOneAndUpdate( 
-            { id: id },
-            { 
-                [campoAModificar]: value
-            }
-        )
+        const busqueda = await buscarProductoPorId(id);
 
-        const changedProduct = await productsModel.findOne({ id: id });
-        await res.status(200).json({
+        if (!busqueda) {
+            return res.status(404).json(`Producto no encontrado`);
+        } else {
+            producto = await modificarProducto(id, campoAModificar, value);
+        };
+
+        res.status(200).json({
             status:"success", 
             message:"Producto actualizado exitosamente",
-            payload: changedProduct
+            payload: producto
         });
 
     } catch (error) {
@@ -91,13 +95,19 @@ export async function modificarProducto(req, res) {
     };
 };
 
-export async function eliminarProducto(req, res) {
+export async function eliminarProductoControlador(req, res) {
 
     try {
 
         const id = req.params.id
-        await productsModel.findOneAndDelete({ id: id });
-        res.json({
+
+        const busqueda = await buscarProductoPorId(id);
+        if (!busqueda) {
+            return res.status(404).json(`Producto no encontrado.`);
+        };
+
+        await eliminarProducto(id);
+        res.status(204).json({
             status:"success", 
             message:"Producto eliminado"
         });

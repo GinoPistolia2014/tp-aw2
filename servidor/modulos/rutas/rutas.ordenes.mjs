@@ -1,15 +1,12 @@
 import express from 'express';
 import { 
-    crearOrden, 
-    obtenerOrdenes, 
-    obtenerOrdenPorId 
+    crearOrdenControlador, 
+    obtenerOrdenesControlador, 
 } from '../controladores/controlador.ordenes.mjs';
 
 const ordersRouter = express.Router();
 
-ordersRouter.get('/ordenes', obtenerOrdenes);
-ordersRouter.get('/ordenes/:id', obtenerOrdenPorId);
-/*router.post('/ordenes', crearOrden);
-router.delete('/ordenes/:id', eliminarOrden);*/
+ordersRouter.get('/ordenes', obtenerOrdenesControlador);
+ordersRouter.post('/ordenes', crearOrdenControlador);
 
 export default ordersRouter

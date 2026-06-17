@@ -40,6 +40,10 @@ const ordersSchema = new mongoose.Schema({
     total: {
         type: Number,
         required: true
+    },
+    id: {
+        type: Number,
+        required: true
     }
 }, {
     collection: 'ordenes'

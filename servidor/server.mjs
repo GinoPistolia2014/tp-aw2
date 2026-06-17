@@ -6,6 +6,8 @@ import productsRouter from "./modulos/rutas/rutas.productos.mjs";
 import ordersRouter from "./modulos/rutas/rutas.ordenes.mjs";
 import config from "./config/config.mjs";
 import usersRouter from "./modulos/rutas/rutas.usuarios.mjs";
+import cookieParser from "cookie-parser";
+import { comprobarToken } from "./modulos/controladores/controlador.usuarios.mjs";
 
 
 export const PUERTO = config.puerto || 4000;
@@ -22,12 +24,17 @@ const __dirname = path.dirname(__filename);
 ============================= */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); ///Permite que Express pueda interpretar los datos enviados desde un formulario
-app.use(express.static(path.resolve(__dirname, "public"))); 
+app.use(express.static(path.resolve(__dirname, "public")));
+app.use(cookieParser(config.cookieSignature));
 
 app.use('/api/v1', productsRouter);
 app.use('/api/v1', ordersRouter);
 app.use('/api/v1', usersRouter);
 
+/////Ruta establecida para protección de la vista 'panelAdmin'
+app.get('/views/adminPanel.html', comprobarToken, (req, res) => {
+  res.sendFile(path.resolve(__dirname, "public", "views", "adminPanel.html"));
+});
 
 /* =============================
    RUTA 404
