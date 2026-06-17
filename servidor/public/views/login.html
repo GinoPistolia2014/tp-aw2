@@ -16,10 +16,10 @@
         <div id="mensaje" class="mensaje-oculto"></div>
 
         <main class="logincontainer">
-            <form action="/views/panelAdmin.html" method="get" class="form-grid">
+            <form id="login-form" class="form-grid">
                 <legend class="logintitle">Inicio de Sesión</legend>
-                <input type="email" id="email" class="login-input" placeholder="Correo Electrónico">
-                <input type="password" id="password" class="login-input" placeholder="Contraseña">
+                <input type="email" id="email" name="email" class="login-input" placeholder="Correo Electrónico">
+                <input type="password" id="password" name="contrasena" class="login-input" placeholder="Contraseña">
                 <button type="submit" class="btn-checkout" id="login-btn">INGRESAR</button>
             </form>
         </main>

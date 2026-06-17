@@ -8,7 +8,7 @@ const logoutBtn = document.getElementById("logout-btn");
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    let user = localStorage.getItem("usuario")
+    let user = localStorage.getItem("usuario");
 
     if (user === null) {
         userDinamico.textContent = "Bienvenido/a";

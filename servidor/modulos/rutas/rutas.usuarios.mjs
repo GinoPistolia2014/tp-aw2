@@ -1,12 +1,14 @@
 import express from 'express'
 import { 
-    buscarUsuario,
-    crearUsuario } from '../controladores/controlador.usuarios.mjs';
+    buscarUsuarioControlador,
+    crearUsuarioControlador, 
+    firmarToken } from '../controladores/controlador.usuarios.mjs';
 import { verificacionImagenUsuario } from '../multer/multer.usuarios.mjs';
 
 const usersRouter = express.Router();
 
-usersRouter.get('/usuarios/:campo/:contenido', buscarUsuario);
-usersRouter.post('/usuarios', verificacionImagenUsuario, crearUsuario);
+usersRouter.get('/usuarios/:campo/:contenido', buscarUsuarioControlador);
+usersRouter.post('/usuarios', verificacionImagenUsuario, crearUsuarioControlador);
+usersRouter.post('/usuarios/autenticar', firmarToken);
 
 export default usersRouter
