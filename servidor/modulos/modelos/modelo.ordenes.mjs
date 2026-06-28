@@ -18,24 +18,24 @@ const ordersSchema = new mongoose.Schema({
         default: false
     },
     productos:{
-        id: {
-            type: Number
-        },
-        producto: {
-            type: String,
-            required: true
-        },
-        precio: {
-            type: Number,
-            required: true
-        },
-        cantidad: {
-            type: Number,
-            required: true
-        },
-        type: Array,
-        required: true,
-        default: [],
+        type: [{
+            id: {
+                type: Number
+            },
+            nombre: {
+                type: String,
+                required: true
+            },
+            precio: {
+                type: Number,
+                required: true
+            },
+            cantidad: {
+                type: Number,
+                required: true
+            }
+        }],
+        default: false
     },
     total: {
         type: Number,
@@ -47,7 +47,7 @@ const ordersSchema = new mongoose.Schema({
     }
 }, {
     collection: 'ordenes'
-})
+});
 
 const ordersModel = mongoose.model('Orden', ordersSchema);
 

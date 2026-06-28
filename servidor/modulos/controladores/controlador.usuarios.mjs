@@ -2,6 +2,7 @@ import usersModel from "../modelos/modelo.usuarios.mjs";
 import { buscarUsuario, crearUsuario } from "../servicios/servicio.usuarios.mjs";
 import jwt from 'jsonwebtoken';
 import config from "../../config/config.mjs";
+import bcrypt from 'bcryptjs';
 
 export async function crearUsuarioControlador(req, res) {
     try {
@@ -10,12 +11,16 @@ export async function crearUsuarioControlador(req, res) {
             .sort({ id: -1 });     
         
         const nuevoId = ultimoUsuario ? ultimoUsuario.id + 1 : 1;
+
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(req.body.contrasena, salt);
+
         const nuevoUsuario = await crearUsuario(
             req.body.nombre,
             req.body.apellido,
             req.body.email,
             req.body.username,
-            req.body.contrasena,
+            hash,
             req.file ? req.file.filename : false,
             nuevoId
         );
@@ -47,14 +52,17 @@ export async function buscarUsuarioControlador(req, res) {
     };
 };
 
-export async function firmarToken(req, res) {
+export async function autenticarUsuario(req, res) {
 
     try {
         const { email, contrasena } = req.body;
+        if (!email || !contrasena) return res.status(400).json({ error: 'Email and password are required' });
+
         let usuario = await buscarUsuario('email', email);
         if(!usuario) return res.status(404).json('Usuario No Encontrado');
+        const validacionContrasena = await bcrypt.compare(contrasena, usuario[0].contrasena);
 
-        if (email === usuario[0].email && contrasena === usuario[0].contrasena) {
+        if (email === usuario[0].email && validacionContrasena) {
 
             const datos = {
                 username: usuario[0].username,
@@ -63,8 +71,8 @@ export async function firmarToken(req, res) {
 
             jwt.sign(datos, config.JWToken, { expiresIn: '1h' }, (error, token) => {
                 if (error) {
-                    console.log(error.message);
-                    return res.status(500).json({ error: 'Error al generar el token' })
+                    console.error('Error al generar JWT: ', error.message);
+                    return res.status(500).json({ error: 'Error firmando el JWT' });
                 };
 
                 res.cookie('token', token, {
@@ -78,8 +86,8 @@ export async function firmarToken(req, res) {
                 res.status(200).json({
                 message: 'Autenticación exitosa',
                 payload: datos
+                }); 
             }); 
-        }); 
         } else {
             res.status(401).json('Credenciales incorrectas');
         };
@@ -88,21 +96,19 @@ export async function firmarToken(req, res) {
     };
 };
 
-export function comprobarToken(req, res, next) {
+export const removerCookie = (req, res) => {
+    try {
+        res.clearCookie('token', {
+            signed: true,
+            httpOnly: true,
+            sameSite: 'lax',
+            secure: true
+        });
 
-    const token = req.signedCookies['token'];
-    /*if(!token) return res.status(401).json('Token inexistente. Acceso denegado');*/
-    if(!token){
-        res.redirect('/views/login.html');
-        return;
+        res.status(200).json('Cierre de sesión exitoso')
     } 
-
-    jwt.verify(token, config.JWToken, (error, usuario) => {
-        if (error) {
-            return res.status(403).json(`Token expirado o inválido: ${error.message}`);
-        };
-        console.log(usuario);
-        req.usuario = usuario;
-        next();
-    })
-}
+    catch (error) {
+        console.error('Error al cerrar sesión:', error.message);
+        return res.status(500).json(`Error al cerrar sesión: ${error.message}`);
+    };
+};

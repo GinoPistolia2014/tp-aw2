@@ -5,15 +5,17 @@ const deleteForm = document.getElementById("form-eliminarproducto");
 const idEliminar = document.getElementById("deleteinfo");
 const categorias = document.querySelectorAll(".categorias-lista li");
 const userDinamico = document.getElementById("userdinamico");
+const logoutBtn = document.getElementById("logout-btn");
 
+document.addEventListener('DOMContentLoaded', async() => {
 
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    let user = localStorage.getItem("usuario");
-    user !== null ? 
-        userDinamico.textContent = `Bienvenido/a ${user}` : 
-        userDinamico.textContent = "Bienvenido/a";
+    const usuarioLogueado = localStorage.getItem("usuario");
+    const peticion = await fetch(`/api/v1/usuarios/email/${usuarioLogueado}`);
+    const usuario = await peticion.json();
+    
+    usuario != null && usuario != undefined ? 
+        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}` :
+        userDinamico.textContent = 'Bienvenido/a';
     
     categorias.forEach(cat => {
         cat.addEventListener("click", () => {
@@ -23,31 +25,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-if (deleteForm) {
-    deleteForm.addEventListener('submit', async(ev) => {
+deleteForm.addEventListener('submit', async(ev) => {
 
-        ev.preventDefault();
-        validacion();
+    ev.preventDefault();
 
-        await fetch(`/api/v1/productos/${idEliminar.value}`, {
-            method: 'DELETE'
-        });
-        deleteForm.reset();
+    const peticion = await fetch(`/api/v1/productos/${idEliminar.value}`, {
+        method: 'DELETE'
     });
-};
+
+    validacion(peticion.status);
+    deleteForm.reset();
+});
 
 backToPanel.addEventListener('click', () => {
     window.location.href = '/views/panelAdmin.html'
 });
 
+logoutBtn.addEventListener('click', async() => {
+    const peticion = await fetch('/api/v1/usuarios/cerrarSesion');
+
+    if (peticion.status != 200) {
+        showMessage('Error al cerrar sesión', 'error');
+    } else {
+        localStorage.removeItem('usuario');
+        window.location.href = '/views/login.html';
+    };
+});
+
 ///Validación
 
-function validacion() {
-    if (
-        idEliminar.value.trim() !== "" && Number(idEliminar.value) > 0 ) {
+function validacion(statusCode) {
+    if (idEliminar.value.trim() !== "" && Number(idEliminar.value) > 0) {
 
         if (!(isNaN(idEliminar.value))) {
-            showMessage('Producto eliminado exitosamente.');
+
+            if (statusCode === 401) {
+                showMessage('No tienes la autentiacación para eliminar un producto.', 'error');
+            } else if (statusCode === 500) {
+                showMessage('Ocurrió un error al eliminar el producto', 'error');
+            } else {
+                showMessage('Producto eliminado exitosamente.');
+            }
         };
 
     } else {

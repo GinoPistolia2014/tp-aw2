@@ -12,14 +12,19 @@ const talle = document.getElementById("talle");
 const descuento = document.getElementById("descuento");
 const categorias = document.querySelectorAll(".categorias-lista li");
 const userDinamico = document.getElementById("userdinamico");
+const logoutBtn = document.getElementById("logout-btn");
 
 
-document.addEventListener('DOMContentLoaded', () => {
 
-    let user = localStorage.getItem("usuario");
-    user !== null ? 
-        userDinamico.textContent = `Bienvenido/a ${user}` : 
-        userDinamico.textContent = "Bienvenido/a";
+document.addEventListener('DOMContentLoaded', async() => {
+
+    const usuarioLogueado = localStorage.getItem("usuario");
+    const peticion = await fetch(`/api/v1/usuarios/email/${usuarioLogueado}`);
+    const usuario = await peticion.json();
+
+    usuario != null && usuario != undefined ? 
+        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}` :
+        userDinamico.textContent = 'Bienvenido/a';
     
     categorias.forEach(cat => {
         cat.addEventListener("click", () => {
@@ -36,22 +41,33 @@ backToPanel.addEventListener('click', () => {
 createForm.addEventListener('submit', async(ev) => {
 
     ev.preventDefault();
-    validacion();
-
     const datos = new FormData(ev.target)
     
     ///Envío manual de datos del formulario
-    await fetch('/api/v1/productos', {
+    const peticion = await fetch('/api/v1/productos', {
         method: 'POST',
         body: datos
     });
+
+    validacion(peticion.status);
     createForm.reset();
-})
+});
+
+logoutBtn.addEventListener('click', async() => {
+    const peticion = await fetch('/api/v1/usuarios/cerrarSesion');
+
+    if (peticion.status != 200) {
+        showMessage('Error al cerrar sesión', 'error');
+    } else {
+        localStorage.removeItem('usuario');
+        window.location.href = '/views/login.html';
+    };
+});
 
 
 ///Validacion
 
-function validacion() {
+function validacion(statusCode) {
     
     if (
         nombre.value.trim() !== "" &&
@@ -64,7 +80,16 @@ function validacion() {
 
         if (!(isNaN(precio.value)) && !(isNaN(stock.value))) {
 
-            showMessage('Producto agregado exitosamente.');
+            if (statusCode === 401) {
+                showMessage(`No tienes la autenticación para realizar esta acción.`, 'error');
+            } else if (statusCode === 500) {
+                showMessage(`Error interno del servidor al agregar el producto.`, 'error');
+            } else {
+                showMessage('Producto agregado exitosamente.');
+            };
+
+        } else {
+            showMessage('Por favor, ingrese valores válidos.', 'error');
         };
 
     } else {

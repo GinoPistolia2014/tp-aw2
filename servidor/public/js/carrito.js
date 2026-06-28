@@ -128,8 +128,45 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (form) {
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async(e) => {
+      e.preventDefault();
+
       const cart = getCart();
+
+      const nombreCompleto = document.getElementById("fullname").value;
+      const email = document.getElementById("email").value;
+      const direccion = document.getElementById("address").value;
+      const metodoPago = document.getElementById("metodoPago").value;
+      const total = document.getElementById("cart-total").textContent;
+      const productosAEnviar = cart.map(producto => ({
+        id: producto.id,
+        nombre: producto.nombre,
+        precio: producto.precio,
+        cantidad: producto.qty
+      }));
+
+      ///Envío manual de datos del formulario
+      const peticion = await fetch('/api/v1/ordenes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            nombreCompleto,
+            email,
+            direccion,
+            metodoPago,
+            productos: productosAEnviar,
+            total: Number(total)
+          })
+      });
+
+      if (peticion.status != 201) {
+        showMessage('Error al finalizar la compra', 'error');
+      } else {
+        window.location.href = `/views/confirmacionCompra.html?fullname=${nombreCompleto}&email=${email}&address=${direccion}&paymentMethod=${metodoPago}`
+      }
+
 
       if (cart.length === 0) {
         e.preventDefault();
@@ -140,3 +177,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   mostrarCarrito();
 });
+
+

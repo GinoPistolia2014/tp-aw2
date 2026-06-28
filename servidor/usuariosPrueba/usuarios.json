@@ -1,0 +1,64 @@
+[
+    {
+        "_id": {
+            "$oid": "6a308beb7a40b2380ad8753c"
+        },
+        "nombre": "Tomás",
+        "apellido": "Gauna",
+        "email": "tomas.gauna@gmail.com",
+        "username": "tgauna",
+        "contrasena": "tgauna",
+        "foto": "https://i.pravatar.cc/150?img=1",
+        "__v": 0
+    },
+
+    {
+        "_id": {
+            "$oid": "6a308beb7a40b2380ad8753d"
+        },
+        "nombre": "María",
+        "apellido": "González",
+        "email": "maria.gonzalez@gmail.com",
+        "username": "mariag",
+        "contrasena": "mariag",
+        "foto": "https://i.pravatar.cc/150?img=2",
+        "__v": 0
+    },
+
+    {
+        "_id": {
+            "$oid": "6a308beb7a40b2380ad8753e"
+        },
+        "nombre": "Juan",
+        "apellido": "Pérez",
+        "email": "juan.perez@gmail.com",
+        "username": "juanp",
+        "contrasena": "juanp",
+        "foto": "https://i.pravatar.cc/150?img=3",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a308beb7a40b2380ad8753f"
+        },
+        "nombre": "Lucía",
+        "apellido": "Fernández",
+        "email": "lucia.fernandez@gmail.com",
+        "username": "luciaf",
+        "contrasena": "luciaf",
+        "foto": "https://i.pravatar.cc/150?img=4",
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a308beb7a40b2380ad87540"
+        },
+        "nombre": "Santiago",
+        "apellido": "Rodríguez",
+        "email": "santiago.rodriguez@gmail.com",
+        "username": "santiro",
+        "contrasena": "santiro",
+        "foto": "https://i.pravatar.cc/150?img=5",
+        "__v": 0
+    }
+]
