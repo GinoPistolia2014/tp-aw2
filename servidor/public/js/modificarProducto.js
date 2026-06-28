@@ -7,14 +7,18 @@ const criterio = document.getElementById("criteriomodificar");
 const nuevaInformacion = document.getElementById("nuevainfo");
 const categorias = document.querySelectorAll(".categorias-lista li");
 const userDinamico = document.getElementById("userdinamico");
+const logoutBtn = document.getElementById("logout-btn");
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async() => {
     ////Colocación del User en el encabezado
-    let user = localStorage.getItem("usuario");
-    user !== null ? 
-        userDinamico.textContent = `Bienvenido/a ${user}` : 
-        userDinamico.textContent = "Bienvenido/a";
+    const usuarioLogueado = localStorage.getItem("usuario");
+    const peticion = await fetch(`/api/v1/usuarios/email/${usuarioLogueado}`);
+    const usuario = await peticion.json();
+    
+    usuario != null && usuario != undefined ? 
+        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}` :
+        userDinamico.textContent = 'Bienvenido/a';
     
     ////Activación de categorías del panel lateral
     categorias.forEach(cat => {
@@ -31,9 +35,8 @@ updateForm.addEventListener('submit', async(ev) => {
 
     const criterioModificar = document.getElementById("criteriomodificar").value;
     const infoModificar = document.getElementById("nuevainfo").value;
-    validacion();
 
-    await fetch(`/api/v1/productos/${idModificar.value}`, {
+    const peticion = await fetch(`/api/v1/productos/${idModificar.value}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -43,16 +46,29 @@ updateForm.addEventListener('submit', async(ev) => {
             nuevaInfo: infoModificar
         })
     });
-    updateForm.reset()
+
+    validacion(peticion.status);
+    updateForm.reset();
 });
 
 backToPanel.addEventListener('click', () => {
     window.location.href = '/views/panelAdmin.html'
 });
 
+logoutBtn.addEventListener('click', async() => {
+    const peticion = await fetch('/api/v1/usuarios/cerrarSesion');
+
+    if (peticion.status != 200) {
+        showMessage('Error al cerrar sesión', 'error');
+    } else {
+        localStorage.removeItem('usuario');
+        window.location.href = '/views/login.html';
+    };
+});
+
 //Validacion
 
-function validacion() {
+function validacion(statusCode) {
     if (
         idModificar.value.trim() !== "" && Number(idModificar.value) > 0 &&
         criterio.value.trim() !== "" &&
@@ -60,7 +76,16 @@ function validacion() {
     ) {
 
         if (!(isNaN(idModificar.value))) {
-            showMessage('Producto modificado exitosamente.');
+
+            if (statusCode === 401) {
+                showMessage(`No tienes la autenticación para modificar un producto.`, 'error');
+            } else if (statusCode === 500) {
+                showMessage(`Error interno del servidor al agregar el producto.`, 'error');
+            } else {
+                showMessage('Producto modificado exitosamente.');
+            }
+        } else {
+            showMessage('Por favor, ingrese valores válidos.', 'error');
         };
 
     } else {

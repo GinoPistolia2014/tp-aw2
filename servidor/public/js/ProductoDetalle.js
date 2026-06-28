@@ -1,5 +1,3 @@
-const API_URL = "https://69e4e816cfa9394db8da8480.mockapi.io/products";
-
 const detalleContainer = document.getElementById("producto-detalle");
 
 function calcularPrecioFinal(producto) {
@@ -40,14 +38,14 @@ async function cargarProductoDetalle() {
   }
 
   try {
-    const res = await fetch(`${API_URL}/${id}`);
+    const res = await fetch(`/api/v1/productos/${id}`);
 
     if (!res.ok) {
       throw new Error("No se pudo cargar el producto");
     }
 
     const data = await res.json();
-    const producto = normalizarProducto(data);
+    const producto = normalizarProducto(data[0]);
 
     renderProductoDetalle(producto);
 

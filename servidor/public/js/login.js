@@ -29,12 +29,8 @@ loginForm.addEventListener('submit', async(ev) => {
 
         const data = await response.json();
 
-        console.log(response.status);
-
-        if (response.ok) {
-            showMessage('¡Inicio de sesión correcto!');
-            console.log('Datos del usuario:', data.usuario);
-            
+        if (response.ok) {            
+            JSON.stringify(localStorage.setItem('usuario', email.value));
             window.location.href = '/views/panelAdmin.html';
         } else {
             showMessage('Credenciales incorrectas.', 'error');

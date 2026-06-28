@@ -17,7 +17,7 @@ function showMessage(text, type = "ok") {
     setTimeout(() => {
       msg.classList.add("mensaje-oculto");
     }, 400);
-  }, 2000);
+  }, 5000);
 };
 
 export default showMessage

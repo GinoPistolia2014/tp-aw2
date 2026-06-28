@@ -46,15 +46,15 @@
         <h3>Datos personales</h3>
 
         <div class="form-grid">
-          <input type="text" name="fullname" placeholder="Nombre completo" required>
-          <input type="email" name="email" placeholder="Correo electrónico" required>
-          <input type="text" name="address" placeholder="Dirección" required>
+          <input type="text" id="fullname" name="fullname" placeholder="Nombre completo" required>
+          <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+          <input type="text" id="address" name="address" placeholder="Dirección" required>
         </div>
 
         <h3>Pago</h3>
 
         <div class="form-grid">
-          <select name="paymentMethod" required>
+          <select id="metodoPago" name="paymentMethod" required>
             <option value="">Selecciona un método</option>
             <option value="debito">Débito</option>
             <option value="credito">Crédito</option>
@@ -67,7 +67,7 @@
 
         <input type="hidden" name="cartSummary" id="cart-summary">
 
-        <button type="submit" class="btn-checkout">Finalizar compra</button>
+        <button type="submit" id="checkout" class="btn-checkout">Finalizar compra</button>
       </form>
     </section>
 

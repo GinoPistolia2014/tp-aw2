@@ -7,7 +7,7 @@ import ordersRouter from "./modulos/rutas/rutas.ordenes.mjs";
 import config from "./config/config.mjs";
 import usersRouter from "./modulos/rutas/rutas.usuarios.mjs";
 import cookieParser from "cookie-parser";
-import { comprobarToken } from "./modulos/controladores/controlador.usuarios.mjs";
+import { comprobarToken } from "./modulos/middlewares/autenticacion.mjs";
 
 
 export const PUERTO = config.puerto || 4000;

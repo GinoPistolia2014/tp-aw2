@@ -1643,6 +1643,12 @@ body[data-page="confirmacion"] .header {
   margin: 10px;
 }
 
+#logout-btn{
+  &:hover{
+    cursor: pointer;
+  }
+}
+
 /*/////////////////PARA LA SECCION DE TAREAS*/
 
 .taskscontainer {

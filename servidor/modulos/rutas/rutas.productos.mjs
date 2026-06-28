@@ -5,14 +5,15 @@ import {
     modificarProductoControlador, 
     obtenerProductoPorIdControlador, 
     obtenerProductosControlador } from "../controladores/controlador.productos.mjs";
-import { verificacionImagenProducto } from '../multer/multer.productos.mjs';
+import { verificacionImagenProducto } from '../middlewares/multer.productos.mjs';
+import { comprobarToken } from '../middlewares/autenticacion.mjs';
 
 const productsRouter = express.Router();
 
 productsRouter.get('/productos', obtenerProductosControlador);
 productsRouter.get('/productos/:id', obtenerProductoPorIdControlador);
-productsRouter.post('/productos', verificacionImagenProducto, agregarProductoControlador);
-productsRouter.put('/productos/:id', modificarProductoControlador);
-productsRouter.delete('/productos/:id', eliminarProductoControlador);
+productsRouter.post('/productos', comprobarToken, verificacionImagenProducto, agregarProductoControlador);
+productsRouter.put('/productos/:id', comprobarToken, modificarProductoControlador);
+productsRouter.delete('/productos/:id', comprobarToken, eliminarProductoControlador);
 
 export default productsRouter

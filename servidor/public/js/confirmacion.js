@@ -1,16 +1,17 @@
 function mostrarConfirmacion() {
   const params = new URLSearchParams(location.search);
   const info = document.getElementById("info");
-
   if (!info) return;
 
   let cart = [];
 
   try {
-    cart = JSON.parse(params.get("cartSummary") || "[]");
+    cart = getCart() || "[]";
   } catch (error) {
     cart = [];
   }
+
+  console.log(cart)
 
   const total = cart.reduce((acc, item) => acc + item.precio * item.qty, 0);
 

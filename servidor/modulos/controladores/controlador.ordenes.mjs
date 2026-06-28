@@ -7,28 +7,30 @@ export async function obtenerOrdenesControlador(req, res) {
 
 export async function crearOrdenControlador(req, res) {
 
-    const productosAComprar = JSON.parse(localStorage.getItem('carrito'));
-    const ultimaOrden = await ordersModel
+    try {
+        const ultimaOrden = await ordersModel
         .findOne()
         .sort({ id: -1 });
 
-    const nuevoId = ultimaOrden ? ultimaOrden.id + 1 : 1;
+        const nuevoId = ultimaOrden ? ultimaOrden.id + 1 : 1;
 
-    const newOrder = await new ordersModel.create({
-        nombreCompleto: req.params.fullname,
-        email: req.params.email,
-        direccion: req.params.address,
-        metodoPago: req.params.paymentMethod.value,
-        productos: productosAComprar,
-        total: total || null,
-        id: nuevoId
-    });
+        const nuevaOrden = await ordersModel.create({
+            nombreCompleto: req.body.nombreCompleto,
+            email: req.body.email,
+            direccion: req.body.direccion,
+            metodoPago: req.body.metodoPago,
+            productos: req.body.productos,
+            total: req.body.total,
+            id: nuevoId
+        });
 
-    const nuevaOrden = await ordersModel.find({ id: newId });
+        res.status(201).send({ 
+            message: 'Orden creada exitosamente',
+            payload: nuevaOrden
+        });
 
-    await res.status(201).send({ 
-        message: 'Orden creada exitosamente',
-        payload: nuevaOrden
-    });
-};
+    } catch (error) {
+        res.status(500).json(`Error al buscar usuario: ${error.message}`);
+    }
+}
 

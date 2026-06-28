@@ -1,3 +1,5 @@
+import showMessage from "./notificaciones.js";
+
 const mainContainer = document.querySelector(".panelsection");
 const tasksOption = document.getElementById("tareas");
 const ordersOption = document.getElementById("ordenes");
@@ -6,15 +8,16 @@ const categorias = document.querySelectorAll(".categorias-lista li");
 const userDinamico = document.getElementById("userdinamico");
 const logoutBtn = document.getElementById("logout-btn");
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async() => {
 
-    let user = localStorage.getItem("usuario");
+    const usuarioLogueado = localStorage.getItem("usuario");
+    const peticion = await fetch(`/api/v1/usuarios/email/${usuarioLogueado}`);
+    const usuario = await peticion.json();
 
-    if (user === null) {
-        userDinamico.textContent = "Bienvenido/a";
-    } else {
-        userDinamico.textContent = `Bienvenido/a ${user}` || "";
-    };
+    usuario != null && usuario != undefined ? 
+        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}` :
+        userDinamico.textContent = 'Bienvenido/a';
+
 
     categorias.forEach(cat => {
     cat.addEventListener("click", () => {
@@ -24,55 +27,105 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })
 
-tasksOption.addEventListener('click', () => {
+tasksOption.addEventListener('click', async() => {
 
-    while (mainContainer.firstChild) {
+    const flag = await permisoParaFuncionalidades();
+    
+    if (!flag) {
+        showMessage('No tienes autorización para realizar esta acción.', 'error');
+        mainContainer.innerHTML = `
+            <h3>¡Bienvenido/a al panel de administración!</h3>
+            <p>Si no tienes las credenciales adecuadas, cierra sesión y logueate nuevamente</p>
+        `;
+        return;
+
+    } else {
+
+        while (mainContainer.firstChild) {
         mainContainer.removeChild(mainContainer.firstChild);
-    };
+        };
 
-    if (!(mainContainer.classList.contains("ordenes")) && (!(mainContainer.classList.contains("inventario")))) {
-        mainContainer.classList.add("tareas");
-    };
+        if (!(mainContainer.classList.contains("ordenes")) && (!(mainContainer.classList.contains("inventario")))) {
+            mainContainer.classList.add("tareas");
+        };
 
-    if (mainContainer.classList.contains("ordenes") || mainContainer.classList.contains("inventario")) {
-        mainContainer.classList.replace("ordenes", "tareas");
-        mainContainer.classList.replace("inventario", "tareas");
+        if (mainContainer.classList.contains("ordenes") || mainContainer.classList.contains("inventario")) {
+            mainContainer.classList.replace("ordenes", "tareas");
+            mainContainer.classList.replace("inventario", "tareas");
+        };
+        toggleContent();  
     };
-    toggleContent();
 });
 
-ordersOption.addEventListener('click', () => {
+ordersOption.addEventListener('click', async() => {
 
-    while (mainContainer.firstChild) {
+    const flag = await permisoParaFuncionalidades();
+
+    if (!flag) {
+        showMessage('No tienes autorización para realizar esta acción.', 'error');
+        mainContainer.innerHTML = `
+            <h3>¡Bienvenido/a al panel de administración!</h3>
+            <p>Si no tienes las credenciales adecuadas, cierra sesión y logueate nuevamente</p>
+        `;
+        return;
+
+    } else {
+
+        while (mainContainer.firstChild) {
         mainContainer.removeChild(mainContainer.firstChild);
-    };
+        };
 
-    if (!(mainContainer.classList.contains("tareas")) && (!(mainContainer.classList.contains("inventario")))) {
-        mainContainer.classList.add("ordenes");
-    };
+        if (!(mainContainer.classList.contains("tareas")) && (!(mainContainer.classList.contains("inventario")))) {
+            mainContainer.classList.add("ordenes");
+        };
 
-    if (mainContainer.classList.contains("tareas") || mainContainer.classList.contains("inventario")) {
-        mainContainer.classList.replace("tareas", "ordenes")
-        mainContainer.classList.replace("inventario", "ordenes");
+        if (mainContainer.classList.contains("tareas") || mainContainer.classList.contains("inventario")) {
+            mainContainer.classList.replace("tareas", "ordenes")
+            mainContainer.classList.replace("inventario", "ordenes");
+        };
+        toggleContent();
     };
-    toggleContent();
 });
 
-stockOption.addEventListener('click', () => {
+stockOption.addEventListener('click', async() => {
 
-    while (mainContainer.firstChild) {
+    const flag = await permisoParaFuncionalidades();
+
+    if (!flag) {
+        showMessage('No tienes autorización para realizar esta acción.', 'error');
+        mainContainer.innerHTML = `
+            <h3>¡Bienvenido/a al panel de administración!</h3>
+            <p>Si no tienes las credenciales adecuadas, cierra sesión y logueate nuevamente</p>
+        `;
+        return;
+
+    } else {
+        
+        while (mainContainer.firstChild) {
         mainContainer.removeChild(mainContainer.firstChild);
-    };
+        };
 
-    if (!(mainContainer.classList.contains("ordenes")) && (!(mainContainer.classList.contains("tareas")))) {
-        mainContainer.classList.add("inventario");
-    };
+        if (!(mainContainer.classList.contains("ordenes")) && (!(mainContainer.classList.contains("tareas")))) {
+            mainContainer.classList.add("inventario");
+        };
 
-    if (mainContainer.classList.contains("ordenes") || mainContainer.classList.contains("tareas")) {
-        mainContainer.classList.replace("ordenes", "inventario")
-        mainContainer.classList.replace("tareas", "inventario");
+        if (mainContainer.classList.contains("ordenes") || mainContainer.classList.contains("tareas")) {
+            mainContainer.classList.replace("ordenes", "inventario")
+            mainContainer.classList.replace("tareas", "inventario");
+        };
+        toggleContent();
+    }
+});
+
+logoutBtn.addEventListener('click', async() => {
+    const peticion = await fetch('/api/v1/usuarios/cerrarSesion');
+
+    if (peticion.status != 200) {
+        showMessage('Error al cerrar sesión', 'error');
+    } else {
+        localStorage.removeItem('usuario');
+        window.location.href = '/views/login.html';
     };
-    toggleContent();
 });
 
 async function toggleContent() {
@@ -104,29 +157,61 @@ async function toggleContent() {
         const deleteBtn = document.getElementById("eliminar");
 
         if (mainContainer.contains(createBtn)) {
-            createBtn.addEventListener('click', () => {
-                window.location.href = '/views/crearProducto.html'
-            })
+            createBtn.addEventListener('click', async() => {
+                const flag = await permisoParaFuncionalidades();
+
+                if (!flag) {
+                    showMessage('No tienes autorización para realizar esta acción.', 'error');
+                    mainContainer.innerHTML = `
+                        <h3>¡Bienvenido/a al panel de administración!</h3>
+                        <p>Si no tienes las credenciales adecuadas, cierra sesión y logueate nuevamente</p>
+                    `;
+                    return;
+                } else {
+                    window.location.href = '/views/crearProducto.html'
+                };
+            });
         };
 
         if (mainContainer.contains(updateBtn)) {
-            updateBtn.addEventListener('click', () => {
-                window.location.href = '/views/modificarProducto.html'
+            updateBtn.addEventListener('click', async() => {
+
+                const flag = await permisoParaFuncionalidades();
+                if (!flag) {
+                    showMessage('No tienes autorización para realizar esta acción.', 'error');
+                    mainContainer.innerHTML = `
+                        <h3>¡Bienvenido/a al panel de administración!</h3>
+                        <p>Si no tienes las credenciales adecuadas, cierra sesión y logueate nuevamente</p>
+                    `;
+                    return;
+                } else {
+                    window.location.href = '/views/modificarProducto.html'
+                };
             })
         };
         
         if (mainContainer.contains(deleteBtn)) {
-            deleteBtn.addEventListener('click', () => {
-                window.location.href = '/views/eliminarProducto.html'
-            })
+            deleteBtn.addEventListener('click', async() => {
+
+                const flag = await permisoParaFuncionalidades();
+
+                if (!flag) {
+                    showMessage('No tienes autorización para realizar esta acción.', 'error');
+                    mainContainer.innerHTML = `
+                        <h3>¡Bienvenido/a al panel de administración!</h3>
+                        <p>Si no tienes las credenciales adecuadas, cierra sesión y logueate nuevamente</p>
+                    `;
+                    return;
+                } else {
+                    window.location.href = '/views/eliminarProducto.html'
+                };
+            });
         };
 
     } else if (mainContainer.classList.contains("ordenes")) {
         const peticion = await fetch('/api/v1/ordenes');
         const ordenes = await peticion.json();
-        while (!ordenes) {
-            mainContainer.innerHTML = `Cargando...`
-        }
+
         let paginaActual = 1;
         const headers = ['Cliente', 'Dirección', 'Método de Pago', 'Total']
         const campos = ['nombreCompleto', 'direccion', 'metodoPago', 'total']
@@ -148,9 +233,6 @@ logoutBtn.addEventListener('click', () => {
 
 function renderizarObjetos(datos, paginaActual, titulo, headers, campos) {
 
-    while (!datos) {
-        mainContainer.innerHTML = `Cargando...`
-    }
     const elementosPorPagina = 5;
 
     const inicio = (paginaActual - 1) * elementosPorPagina;
@@ -194,21 +276,21 @@ function renderizarObjetos(datos, paginaActual, titulo, headers, campos) {
         </div>
     `;
 
-     document.getElementById("prev")?.addEventListener("click", () => {
+    document.getElementById("prev")?.addEventListener("click", () => {
          if (paginaActual > 1) {
             paginaActual--;
 
             if (titulo === 'Órdenes') {
                 renderizarObjetos(datos, paginaActual, 'Órdenes', headers, campos);
-            }
+            };
 
             if (titulo === 'Inventario') {
                 renderizarObjetos(datos, paginaActual, 'Inventario', headers, campos);
-            }
+            };
         }
-     });
+    });
 
-     document.getElementById("next")?.addEventListener("click", () => {
+    document.getElementById("next")?.addEventListener("click", () => {
         if (fin < datos.length) {
             paginaActual++;
 
@@ -220,5 +302,15 @@ function renderizarObjetos(datos, paginaActual, titulo, headers, campos) {
                 renderizarObjetos(datos, paginaActual, 'Inventario', headers, campos);
             };   
         };    
-     });
+    });
 };
+
+async function permisoParaFuncionalidades() {
+    const peticion = await fetch('/api/v1/auth-or-not');
+
+    if(peticion.status != 200){
+        return false
+    } else {
+        return true
+    };
+}
