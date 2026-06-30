@@ -13,7 +13,7 @@ const productsRouter = express.Router();
 productsRouter.get('/productos', obtenerProductosControlador);
 productsRouter.get('/productos/:id', obtenerProductoPorIdControlador);
 productsRouter.post('/productos', comprobarToken, verificacionImagenProducto, agregarProductoControlador);
-productsRouter.put('/productos/:id', comprobarToken, modificarProductoControlador);
+productsRouter.put('/productos/:nombre', comprobarToken, modificarProductoControlador);
 productsRouter.delete('/productos/:id', comprobarToken, eliminarProductoControlador);
 
 export default productsRouter

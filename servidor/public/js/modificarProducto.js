@@ -2,11 +2,12 @@ import showMessage from "./notificaciones.js";
 
 const backToPanel = document.getElementById("backtomainpanel");
 const updateForm = document.getElementById("form-modificarproducto");
-const idModificar = document.getElementById("idproducto");
+const productoModificar = document.getElementById("nombreproducto");
 const criterio = document.getElementById("criteriomodificar");
 const nuevaInformacion = document.getElementById("nuevainfo");
 const categorias = document.querySelectorAll(".categorias-lista li");
 const userDinamico = document.getElementById("userdinamico");
+const picDinamico = document.getElementById("profilepic");
 const logoutBtn = document.getElementById("logout-btn");
 
 
@@ -16,9 +17,13 @@ document.addEventListener('DOMContentLoaded', async() => {
     const peticion = await fetch(`/api/v1/usuarios/email/${usuarioLogueado}`);
     const usuario = await peticion.json();
     
-    usuario != null && usuario != undefined ? 
-        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}` :
+    if(usuario != null && usuario != undefined) {
+        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}`;
+        picDinamico.src = `../img/fotosPerfil/${usuario[0].foto}`;
+    } else {
         userDinamico.textContent = 'Bienvenido/a';
+        picDinamico.src = '../img/fotosPerfil/usuario.png';
+    }
     
     ////Activación de categorías del panel lateral
     categorias.forEach(cat => {
@@ -36,7 +41,7 @@ updateForm.addEventListener('submit', async(ev) => {
     const criterioModificar = document.getElementById("criteriomodificar").value;
     const infoModificar = document.getElementById("nuevainfo").value;
 
-    const peticion = await fetch(`/api/v1/productos/${idModificar.value}`, {
+    const peticion = await fetch(`/api/v1/productos/${productoModificar.value}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -70,23 +75,20 @@ logoutBtn.addEventListener('click', async() => {
 
 function validacion(statusCode) {
     if (
-        idModificar.value.trim() !== "" && Number(idModificar.value) > 0 &&
+        productoModificar.value.trim() !== "" &&
         criterio.value.trim() !== "" &&
         nuevaInformacion.value.trim() !== ""
     ) {
 
-        if (!(isNaN(idModificar.value))) {
 
             if (statusCode === 401) {
                 showMessage(`No tienes la autenticación para modificar un producto.`, 'error');
             } else if (statusCode === 500) {
-                showMessage(`Error interno del servidor al agregar el producto.`, 'error');
+                showMessage(`Error interno del servidor al modificar el producto.`, 'error');
             } else {
                 showMessage('Producto modificado exitosamente.');
             }
-        } else {
-            showMessage('Por favor, ingrese valores válidos.', 'error');
-        };
+      
 
     } else {
         showMessage('Todos los campos deben llenarse obligatoriamente.', 'error');

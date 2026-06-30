@@ -63,7 +63,7 @@ export async function agregarProductoControlador(req, res) {
 export async function modificarProductoControlador(req, res) {
 
     try {
-        const id = Number(req.params.id);
+        const nombre = req.params.nombre;
         const campoAModificar = req.body.criterio;
         const value = req.body.nuevaInfo;
         let producto;
@@ -76,13 +76,8 @@ export async function modificarProductoControlador(req, res) {
             Number(value);
         };
 
-        const busqueda = await buscarProductoPorId(id);
+            producto = await modificarProducto(nombre, campoAModificar, value);
 
-        if (!busqueda) {
-            return res.status(404).json(`Producto no encontrado`);
-        } else {
-            producto = await modificarProducto(id, campoAModificar, value);
-        };
 
         res.status(200).json({
             status:"success", 
