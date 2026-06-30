@@ -64,6 +64,7 @@ function showMessage(text, type = "ok") {
 }
 
 function addToCart(product) {
+  console.log(product.stock)
   const cart = getCart();
   const stock = Number(product.stock) || 0;
 
@@ -114,6 +115,7 @@ function toggleFavorite(product) {
       id: product.id,
       nombre: product.nombre,
       precio: Number(product.precio),
+      stock: product.stock,
       imagen: product.imagen,
       categoria: product.categoria || ""
     });
