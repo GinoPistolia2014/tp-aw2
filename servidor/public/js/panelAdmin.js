@@ -154,7 +154,7 @@ async function toggleContent() {
                 </article>
                 
             </div>
-        `
+        `;
 
         const createBtn = document.getElementById("crear");
         const updateBtn = document.getElementById("modificar");
