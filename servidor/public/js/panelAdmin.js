@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         picDinamico.src = `/img/fotosPerfil/${usuario[0].foto}`;
     } else {
         userDinamico.textContent = 'Bienvenido/a';
-        picDinamico.src = '/img/usuario.png';
+        picDinamico.src = '/img/fotosPerfil/usuario.png';
     }
 
     categorias.forEach(cat => {
