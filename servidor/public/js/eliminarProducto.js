@@ -5,6 +5,7 @@ const deleteForm = document.getElementById("form-eliminarproducto");
 const idEliminar = document.getElementById("deleteinfo");
 const categorias = document.querySelectorAll(".categorias-lista li");
 const userDinamico = document.getElementById("userdinamico");
+const picDinamico = document.getElementById("profilepic");
 const logoutBtn = document.getElementById("logout-btn");
 
 document.addEventListener('DOMContentLoaded', async() => {
@@ -13,9 +14,13 @@ document.addEventListener('DOMContentLoaded', async() => {
     const peticion = await fetch(`/api/v1/usuarios/email/${usuarioLogueado}`);
     const usuario = await peticion.json();
     
-    usuario != null && usuario != undefined ? 
-        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}` :
+    if(usuario != null && usuario != undefined) {
+        userDinamico.textContent = `Bienvenido/a ${usuario[0].nombre}`;
+        picDinamico.src = `/img/fotosPerfil/${usuario[0].foto}`;
+    } else {
         userDinamico.textContent = 'Bienvenido/a';
+        picDinamico.src = '/img/fotosPerfil/usuario.png';
+    }
     
     categorias.forEach(cat => {
         cat.addEventListener("click", () => {

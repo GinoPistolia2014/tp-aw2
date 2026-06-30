@@ -35,15 +35,15 @@ export async function agregarProducto(
     return nuevoProducto
 };
 
-export async function modificarProducto(id, campo, nuevoValor) {
+export async function modificarProducto(nombre, campo, nuevoValor) {
     await productsModel.findOneAndUpdate( 
-            { id: id },
+            { nombre: nombre },
             { 
                 [campo]: nuevoValor
             }
         );
 
-    const productoModificado = await productsModel.findOne({ id: id });
+    const productoModificado = await productsModel.findOne({ nombre: nombre });
     return productoModificado
 };
 
